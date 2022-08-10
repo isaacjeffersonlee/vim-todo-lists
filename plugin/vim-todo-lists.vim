@@ -365,10 +365,10 @@ endfunction
 function! VimTodoListsSetItemMode()
   nnoremap <buffer><silent> o :VimTodoListsCreateNewItemBelow<CR>
   nnoremap <buffer><silent> O :VimTodoListsCreateNewItemAbove<CR>
-  nnoremap <buffer><silent> j :VimTodoListsGoToNextItem<CR>
-  nnoremap <buffer><silent> k :VimTodoListsGoToPreviousItem<CR>
-  nnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
-  vnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
+  "nnoremap <buffer><silent> j :VimTodoListsGoToNextItem<CR>
+  "nnoremap <buffer><silent> k :VimTodoListsGoToPreviousItem<CR>
+  "nnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
+  "vnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
   inoremap <buffer><silent> <CR> <ESC>:call VimTodoListsAppendDate()<CR>:silent call VimTodoListsCreateNewItemBelow()<CR>
   inoremap <buffer><silent> <kEnter> <ESC>:call VimTodoListsAppendDate()<CR>A<CR><ESC>:VimTodoListsCreateNewItem<CR>
   noremap <buffer><silent> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
@@ -494,3 +494,61 @@ if !exists('g:vimtodolists_plugin')
   command! -range VimTodoListsIncreaseIndent silent <line1>,<line2>call VimTodoListsIncreaseIndent()
   command! -range VimTodoListsDecreaseIndent silent <line1>,<line2>call VimTodoListsDecreaseIndent()
 endif
+
+"------------------------------  MY ADDITIONS --------------------------------
+" Start .todo.md files in todo list mode
+au BufEnter,BufRead,BufNewFile *.todo.md call VimTodoListsSetItemMode()
+" au BufEnter,BufRead,BufNewFile *.todo.md call indent_guides#enable()
+let g:VimTodoListsKeepSameIndent = 1
+let g:VimTodoListsDatesEnabled = 0
+let g:VimTodoListsDatesFormat = "%H:%M:%S %a %d"
+let g:VimTodoListsUndoneItem = '○'
+let g:VimTodoListsDoneItem = '➜'
+"Custom syntax highlighting for the todo-lists plugin
+"(By default there is no syntax highlighting for todo files.)
+" Highlight headings beginning with #
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoHeading "\v#.*$"
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoHeading String
+" Highlight different indentation level bullet points
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoLevel1 "○"
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel1 Identifier
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoLevel2 "  ○"
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel2 PreProc
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoLevel3 "    ○"
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel3 Todo
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoLevel4 "      ○"
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel4 Comment
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoLevel5 "        ○"
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel5 Type
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoLevel6 "          ○"
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel6 Identifier
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoLevel7 "            ○"
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel7 PreProc
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoLevel8 "              ○"
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel8 Todo
+" Syntax highlight dates
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoDate "([0-9][0-9]:[0-9][0-9].*)"
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoDate Comment
+"
+function! VimTodoListsCustomMappings()
+    "Change, append the current time to the end and then toggle todo state to done
+    nnoremap <buffer><silent>s :s/$/\=strftime(' (%H:%M:%S %a %d)')/<CR>:VimTodoListsToggleItem<CR>
+    vnoremap <buffer><silent>s :s/$/\=strftime(' (%H:%M:%S %a %d)')/<CR>:VimTodoListsToggleItem<CR>
+    "Append Current time and date
+    nnoremap <buffer><silent><C-c><C-s> :s/$/\=strftime(' (00:00:00 %a %d)')/<CR>$%<Right><Right>a
+    "Delete all done todos
+    nnoremap <buffer><silent><C-c><C-d> :g/➜/d<CR>
+    "Indent current todo
+    " nnoremap <buffer><silent>L :VimTodoListsIncreaseIndent<CR>
+    " nnoremap <buffer><silent>H :VimTodoListsDecreaseIndent<CR>
+    " vnoremap <buffer><silent>L :VimTodoListsIncreaseIndent<CR>
+    " vnoremap <buffer><silent>H :VimTodoListsDecreaseIndent<CR>
+    "Move lines up or down
+    nnoremap <buffer><silent>K :move-2<CR>
+    xnoremap <buffer><silent>K :move-2<CR>gv
+    nnoremap <buffer><silent>J :move+<CR>
+    xnoremap <buffer><silent>J :move'>+<CR>g
+    "Toggle TodoList mode
+    noremap <buffer> <leader>e :silent call VimTodoListsSetItemMode()<CR>
+endfunction
+let g:VimTodoListsCustomKeyMapper = 'VimTodoListsCustomMappings'
