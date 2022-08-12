@@ -92,7 +92,6 @@ function! VimTodoListsSetItemDone(lineno)
   call setline(a:lineno, substitute(l:line, '^\(\s*\)'.g:VimTodoListsUndoneItemEscaped, '\1'.g:VimTodoListsDoneItem, ''))
 endfunction
 
-
 " Sets the item not done
 function! VimTodoListsSetItemNotDone(lineno)
   let l:line = getline(a:lineno)
@@ -355,8 +354,8 @@ function! VimTodoListsSetNormalMode()
   nunmap <buffer> k
   " iunmap <buffer> <CR>
   iunmap <buffer> <kEnter>
-  nnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
-  vnoremap <buffer><silent> <Space> :'<,'>VimTodoListsToggleItem<CR>
+  " nnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
+  " vnoremap <buffer><silent> <Space> :'<,'>VimTodoListsToggleItem<CR>
   noremap <buffer><silent> <leader>e :silent call VimTodoListsSetItemMode()<CR>
 endfunction
 
@@ -390,13 +389,13 @@ endfunction
 
 " Creates a new item above the current line with the same indent
 function! VimTodoListsCreateNewItemAbove()
-  execute "normal! O" . VimTodoListsIdent() . g:VimTodoListsUndoneItem . " "
+  execute "normal! O" . g:VimTodoListsUndoneItem . " "
   startinsert!
 endfunction
 
 " Creates a new item below the current line with the same indent
 function! VimTodoListsCreateNewItemBelow()
-  execute "normal! o" . VimTodoListsIdent() . g:VimTodoListsUndoneItem . " "
+  execute "normal! o" . g:VimTodoListsUndoneItem . " "
   startinsert!
 endfunction
 
