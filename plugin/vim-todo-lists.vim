@@ -515,7 +515,7 @@ au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel1 I
 au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoLevel2 "  ○"
 au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel2 PreProc
 au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoLevel3 "    ○"
-au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel3 Todo
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel3 Exception
 au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoLevel4 "      ○"
 au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel4 Comment
 au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoLevel5 "        ○"
