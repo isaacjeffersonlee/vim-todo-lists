@@ -528,6 +528,9 @@ au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoLevel8 T
 " Syntax highlight dates
 au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoDate "([0-9][0-9]:[0-9][0-9].*)"
 au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoDate Comment
+
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md syntax match todoDay "\[.*\]"
+au BufEnter,BufRead,BufNewFile,BufReadPost *.todo.md highlight link todoDay Todo
 "
 function! VimTodoListsCustomMappings()
     "Change, append the current time to the end and then toggle todo state to done
